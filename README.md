@@ -40,6 +40,7 @@ pip install -r requirements.txt
 Other
 ```
 python -m pip install -U pip setuptools wheel
+pip install pip==24.0.0
 pip install -U torch torchaudio 
 pip install -r requirements.txt
 ```
