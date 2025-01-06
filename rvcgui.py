@@ -107,6 +107,9 @@ def vc_single(
     crepe_hop_length,
     output_path=None,
 ):  # spk_item, input_audio0, vc_transform0,f0_file,f0method0
+    print ('HERE I AM===================================HERE I AM')
+    print (sid, input_audio, f0_up_key, f0_file, f0_method, file_index, index_rate, crepe_hop_length, output_path)
+    print ('HERE I AM===================================HERE I AM')
     global tgt_sr, net_g, vc, hubert_model
     if input_audio is None:
         return "You need to upload an audio", None
@@ -124,7 +127,7 @@ def vc_single(
             .strip('"')
             .strip(" ")
             .replace("trained", "added")
-        )  # 防止小白写错，自动帮他替换掉
+        )  # Prevent newbies from making mistakes and automatically replace them
      
         audio_opt = vc.pipeline(
             hubert_model,
@@ -169,7 +172,7 @@ def vc_multi(
     try:
         dir_path = (
             dir_path.strip(" ").strip('"').strip("\n").strip('"').strip(" ")
-        )  # 防止小白拷路径头尾带了空格和"和回车
+        )  # Prevent newbies from copying the path with spaces, " and carriage returns at the beginning and end
         opt_root = opt_root.strip(" ").strip(
             '"').strip("\n").strip('"').strip(" ")
         os.makedirs(opt_root, exist_ok=True)
@@ -208,19 +211,17 @@ def vc_multi(
     except:
         yield traceback.format_exc()
 
-
-# 一个选项卡全局只能有一个音色
 def get_vc(weight_root, sid):
     global n_spk, tgt_sr, net_g, vc, cpt, version
     if sid == "" or sid == []:
         global hubert_model
-        if hubert_model != None:  # 考虑到轮询, 需要加个判断看是否 sid 是由有模型切换到无模型的
+        if hubert_model != None:
             print("clean_empty_cache")
-            del net_g, n_spk, vc, hubert_model, tgt_sr  # ,cpt
+            del net_g, n_spk, vc, hubert_model, tgt_sr
             hubert_model = net_g = n_spk = vc = hubert_model = tgt_sr = None
             if torch.cuda.is_available():
                 torch.cuda.empty_cache()
-            ###楼下不这么折腾清理不干净
+
             if_f0 = cpt.get("f0", 1)
             version = cpt.get("version", "v1")
             if version == "v1":
@@ -286,8 +287,6 @@ def if_done(done, p):
 
 def if_done_multi(done, ps):
     while 1:
-        # poll==None代表进程未结束
-        # 只要有一个进程未结束都不停
         flag = 1
         for p in ps:
             if p.poll() == None:
@@ -615,7 +614,7 @@ index_rate_label = ctk.CTkLabel(
 
 # intiilizing run button widget
 run_button = ctk.CTkButton(
-    left_frame, fg_color="green", hover_color="darkgreen", text="Convert", command=start_processing)
+    left_frame, fg_color="green", hover_color="darkgreen", text="Convert file", command=start_processing)
 
 # intiilizing output label widget
 output_label = ctk.CTkLabel(right_frame, text="")
